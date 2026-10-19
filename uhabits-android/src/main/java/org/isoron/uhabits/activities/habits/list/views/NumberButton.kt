@@ -144,9 +144,10 @@ class NumberButtonView(
         }
 
         fun draw(canvas: Canvas) {
+            // Days without data stay dim, even when their period meets the target
             val activeColor = when {
-                state.completed -> state.color
                 state.value < 0.0 -> lowContrast
+                state.completed -> state.color
                 else -> mediumContrast
             }
 
