@@ -89,7 +89,7 @@ class ScoreList {
         }
 
         val window = ArrayDeque<Int>()
-        var previousValue = if (isNumerical && isAtMost) 1.0 else 0.0
+        var previousValue = 0.0
         for (i in values.indices) {
             val offset = values.size - i - 1
             val value = values[offset]
@@ -113,6 +113,9 @@ class ScoreList {
                         } else {
                             1.0
                         }
+                    } else if (value == Entry.UNKNOWN) {
+                        // Days without data are missed, not zero
+                        0.0
                     } else {
                         if (targetValue > 0) {
                             (1 - ((normalizedRollingSum - targetValue) / targetValue)).coerceIn(
