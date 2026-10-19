@@ -161,7 +161,9 @@ open class EntryList {
                 val periodSum = entries.sumOf { clampedValue(it) }
                 val skippedDays = entries.count { it.value == Entry.SKIP }
                 val target = max(0.0, baseTarget - dailyTarget * skippedDays)
-                val met = when (targetType) {
+                // A period without any logged value is unknown, not zero
+                val hasData = entries.any { it.value != Entry.UNKNOWN }
+                val met = hasData && when (targetType) {
                     NumericalHabitType.AT_LEAST -> periodSum / 1000.0 >= target
                     NumericalHabitType.AT_MOST -> periodSum / 1000.0 <= target
                 }

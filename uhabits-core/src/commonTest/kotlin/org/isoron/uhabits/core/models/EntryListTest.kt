@@ -146,6 +146,31 @@ class EntryListTest : BaseUnitTest() {
     }
 
     @Test
+    fun testComputeNumericalDailyAtMost() {
+        val today = LocalDate(2015, 1, 25)
+        setToday(today)
+
+        val original = EntryList()
+        original.add(Entry(today.minus(1), 8000))
+        original.add(Entry(today.minus(3), 0))
+        original.add(Entry(today.minus(4), 12000))
+
+        val computed = EntryList()
+        computed.recomputeFrom(original, Frequency.DAILY, isNumerical = true)
+        computed.recomputeCompletion(Frequency.DAILY, true, NumericalHabitType.AT_MOST, 10.0)
+
+        // Days without data are unknown, not zero, so they never meet an "at most" target
+        val expected = listOf(
+            Entry(today, UNKNOWN, "", false),
+            Entry(today.minus(1), 8000, "", true),
+            Entry(today.minus(2), UNKNOWN, "", false),
+            Entry(today.minus(3), 0, "", true),
+            Entry(today.minus(4), 12000, "", false)
+        )
+        assertContentEquals(expected, computed.getKnown())
+    }
+
+    @Test
     fun testComputeNumericalWeekly() {
         val original = EntryList()
         original.add(Entry(LocalDate(2015, 1, 12), 30000))
