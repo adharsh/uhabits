@@ -478,27 +478,27 @@ class NumericalAtMostScoreListTest : NumericalScoreListTest() {
         addEntry(20, 1000)
         addEntries(0, 20, 5000)
         val expectedValues = doubleArrayOf(
-            0.344253,
-            0.363106,
-            0.382992,
-            0.403967,
-            0.426090,
-            0.449426,
-            0.474039,
-            0.500000,
-            0.527383,
-            0.556266,
-            0.586730,
-            0.618863,
-            0.652756,
-            0.688505,
-            0.726212,
-            0.765983,
-            0.807933,
-            0.852180,
-            0.898851,
-            0.948078,
-            1.0,
+            0.017874,
+            0.018853,
+            0.019886,
+            0.020975,
+            0.022124,
+            0.023335,
+            0.024613,
+            0.025961,
+            0.027383,
+            0.028883,
+            0.030464,
+            0.032133,
+            0.033893,
+            0.035749,
+            0.037707,
+            0.039772,
+            0.041950,
+            0.044247,
+            0.046671,
+            0.049227,
+            0.051922,
             0.0,
             0.0
         )
@@ -508,12 +508,12 @@ class NumericalAtMostScoreListTest : NumericalScoreListTest() {
     @Test
     fun test_recompute() {
         habit.recompute()
-        assertCloseTo(1.0, habit.scores[today].value, E)
-        addEntries(0, 2, 5000)
-        assertCloseTo(0.898850, habit.scores[today].value, E)
+        assertCloseTo(0.0, habit.scores[today].value, E)
+        addEntries(0, 2, 1000)
+        assertCloseTo(0.101149, habit.scores[today].value, E)
         habit.frequency = Frequency(1, 2)
         habit.recompute()
-        assertCloseTo(0.927369, habit.scores[today].value, E)
+        assertCloseTo(0.072632, habit.scores[today].value, E)
     }
 
     @Test
@@ -526,10 +526,14 @@ class NumericalAtMostScoreListTest : NumericalScoreListTest() {
     }
 
     @Test
-    fun undereachievingIsntRelevant() {
-        addEntry(1, 10000000)
+    fun emptyDaysAreMissed() {
+        addEntry(1, 0)
         habit.recompute()
-        assertCloseTo(0.950773, habit.scores[today].value, E)
+        assertCloseTo(0.049227, habit.scores[today].value, E)
+
+        addEntry(0, 0)
+        habit.recompute()
+        assertCloseTo(0.101149, habit.scores[today].value, E)
     }
 
     @Test
@@ -538,10 +542,10 @@ class NumericalAtMostScoreListTest : NumericalScoreListTest() {
 
         addEntry(1, 0)
         habit.recompute()
-        assertCloseTo(0.948077, habit.scores[today].value, E)
+        assertCloseTo(0.049227, habit.scores[today].value, E)
 
         addEntry(1, 1000)
         habit.recompute()
-        assertCloseTo(0.948077, habit.scores[today].value, E)
+        assertCloseTo(0.049227, habit.scores[today].value, E)
     }
 }
